@@ -199,7 +199,7 @@ async function AvailProduct(req,resp)
 function doFetchItems(req,resp)
 {
     console.log(req.query);
-    AvailProductModel.find({email:req.query.email}).then((retdoc)=>{
+    AvailProductModel.find({email:req.query.email},{category:1,item:1}).then((retdoc)=>{
         console.log(retdoc);
         if(retdoc!=[])
         resp.json({status:1,res:retdoc})
