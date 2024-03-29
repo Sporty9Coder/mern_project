@@ -227,18 +227,18 @@ function doDeleteItem(req,resp)
     })
 }
 
-function FetchCityConsumer(req,resp)
-{
+    function FetchCityConsumer(req,resp)
+    {
 
-    AvailProductModel.distinct("city").then((retdoc)=>{
-        console.log(retdoc);
-        resp.json({status:true,cities:retdoc});
-    }).catch((err)=>{
-        console.log(err);
-        resp.json({status:false,error:err.message,msg:"error in query"})
-    })
+        AvailProductModel.distinct("city").then((retdoc)=>{
+            console.log(retdoc);
+            resp.json({status:true,cities:retdoc});
+        }).catch((err)=>{
+            console.log(err);
+            resp.json({status:false,error:err.message,msg:"error in query"})
+        })
 
-}
+    }
 
 async function findGrower(req,resp)
 {
