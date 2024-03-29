@@ -228,7 +228,8 @@ async function doDeleteItem(req,resp)
     console.log(newitemary);
 
     arryobj[0].item=newitemary;
-    await arryobj.save().then((retdoc)=>{
+    console.log(arryobj[0]);
+    await arryobj[0].save().then((retdoc)=>{
         console.log(retdoc);
         resp.json({status:true,res:retdoc});
     }).catch((err)=>{
