@@ -214,9 +214,28 @@ async function doDeleteItem(req,resp)
 {
     console.log(req.body);
     const {objid,itemname}=req.body;
-    const obj=await AvailProductModel.find({_id:objid});
-    console.log(obj);
-    
+    try
+    {
+        var arryobj=await AvailProductModel.find({_id:objid});
+        console.log(arryobj);
+    }catch(err)
+    {
+        console.log(err);
+        resp.json({status:false,error:err})
+    }
+
+    const newitemary=arryobj[0].item.filter((str)=>str!==itemname);
+    console.log(newitemary);
+
+    arryobj[0].item=newitemary;
+    await arryobj.save().then((retdoc)=>{
+        console.log(retdoc);
+        resp.json({status:true,res:retdoc});
+    }).catch((err)=>{
+        console.log(err);
+        resp.json({status:false,error:err.message})
+    })
+
 
 }
 
