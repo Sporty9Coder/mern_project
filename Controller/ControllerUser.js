@@ -210,21 +210,14 @@ function doFetchItems(req,resp)
 
 }
 
-function doDeleteItem(req,resp)
+async function doDeleteItem(req,resp)
 {
     console.log(req.body);
-    const {email,category,item}=req.body;
-    AvailProductModel.deleteOne({email:email},{category:category},{item:item}).then((obj)=>{
-        if(obj.deletedCount!==0)
-        {
-            resp.json({status:true,msg:"item deleted successfully",response:1});
-        }
-        else {
-            resp.json({status:true,msg:"item not found",response:0});
-        }
-    }).catch((err)=>{
-        resp.json({status:false,err:err.message});
-    })
+    const {objid,itemname}=req.body;
+    const obj=await AvailProductModel.find({_id:objid});
+    console.log(obj);
+    
+
 }
 
     function FetchCityConsumer(req,resp)
