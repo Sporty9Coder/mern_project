@@ -88,6 +88,7 @@ function AddGrower(req,resp)
     req.body.picpath=filename;
     const doc=new growerModel(req.body);
     doc.save().then((retobj)=>{
+        console.log(retobj);
         resp.json({status:true,res:retobj});
     }).catch((err)=>{
         resp.json({status:false,err:err.message,msg:"signing in again bastard"});
@@ -157,18 +158,25 @@ function doLogin(req,resp)
 
 async function AvailProduct(req,resp)
 {
-
+    let growerObj=[{}];
     console.log(req.body);
-    
-    const growerObj=await growerModel.find({email:req.body.email})
+    try{
+    growerObj=await growerModel.find({email:req.body.email})
+    let gcity="";
 
     console.log(growerObj[0]);
-
+    
+    if(growerObj!=undefined)
+    {
+    if(growerObj[0].city!=="")
     req.body.city=growerObj[0].city;
+    else req.body.city=gcity;
     console.log(req.body);
 
     const doc=new AvailProductModel(req.body);
+    if(growerObj[0].city!=="")
     doc.city=growerObj[0].city
+    else doc.city=gcity;
 
     if(req.body.category==='0')
     {
@@ -183,17 +191,33 @@ async function AvailProduct(req,resp)
 
     
     await doc.save().then((retdoc)=>{
-        resp.json({status:true,res:retdoc,city:growerObj[0].city})
+        console.log(retdoc);
+        resp.json({status:true,res:retdoc})
     }).catch((err)=>{
         console.log(err);
         resp.json({status:false,err:err.message});
     })
-
-    /*catch(err)
+    }
+    else {
+        resp.json({status:true,message:0});
+    }
+    }
+    catch(err)
     {
-        console.log('Error in AvailProduct:', err);
-        resp.status(500).json({ status: false, error: 'Internal server error' });
-    }*/
+        console.log("hello");
+        console.log(growerObj);
+        console.log("bye");
+        console.log(Array.isArray(growerObj));
+        if(Array.isArray(growerObj)&&growerObj.length()!=0)
+        {
+            console.log('Error in AvailProduct:', err);
+        resp.json({ status: false, error: 'Internal server error'});
+        }
+        else {
+            console.log('Error in AvailProduct:', err);
+        resp.json({ status: false, error: 'fill your profile',emptyProfile:true});
+        }
+    }
 }
 
 function doFetchItems(req,resp)
